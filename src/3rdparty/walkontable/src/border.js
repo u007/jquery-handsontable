@@ -5,7 +5,6 @@ function WalkontableBorder(instance, settings) {
   this.instance = instance;
   this.settings = settings;
   this.wtDom = this.instance.wtDom;
-
   this.main = document.createElement("div");
   style = this.main.style;
   style.position = 'absolute';
@@ -17,9 +16,6 @@ function WalkontableBorder(instance, settings) {
     var DIV = document.createElement('DIV');
     DIV.className = 'wtBorder ' + (settings.className || '');
     style = DIV.style;
-    style.backgroundColor = settings.border.color;
-    style.height = settings.border.width + 'px';
-    style.width = settings.border.width + 'px';
     this.main.appendChild(DIV);
   }
 
@@ -27,7 +23,6 @@ function WalkontableBorder(instance, settings) {
   this.left = this.main.childNodes[1];
   this.bottom = this.main.childNodes[2];
   this.right = this.main.childNodes[3];
-
 
   /*$(this.top).on(sss, function(event) {
    event.preventDefault();
@@ -58,9 +53,6 @@ function WalkontableBorder(instance, settings) {
   this.corner = this.main.childNodes[4];
   this.corner.className += ' corner';
   this.cornerStyle = this.corner.style;
-  this.cornerStyle.width = '5px';
-  this.cornerStyle.height = '5px';
-  this.cornerStyle.border = '2px solid #FFF';
 
   this.disappear();
   if (!instance.wtTable.bordersHolder) {
@@ -216,6 +208,7 @@ WalkontableBorder.prototype.appear = function (corners) {
     left = minLeft - containerOffset.left - 1;
 
     var style = this.wtDom.getComputedStyle(fromTD);
+
     if (parseInt(style['borderTopWidth'], 10) > 0) {
       top += 1;
       height = height > 0 ? height - 1 : 0;
@@ -250,13 +243,11 @@ WalkontableBorder.prototype.appear = function (corners) {
     this.leftStyle.display = 'block';
   }
 
-  var delta = Math.floor(this.settings.border.width / 2);
-
   if (hideBottom) {
     this.bottomStyle.display = 'none';
   }
   else {
-    this.bottomStyle.top = top + height - delta + 'px';
+    this.bottomStyle.top = top + height + 'px';
     this.bottomStyle.left = left + 'px';
     this.bottomStyle.width = width + 'px';
     this.bottomStyle.display = 'block';
@@ -267,7 +258,7 @@ WalkontableBorder.prototype.appear = function (corners) {
   }
   else {
     this.rightStyle.top = top + 'px';
-    this.rightStyle.left = left + width - delta + 'px';
+    this.rightStyle.left = left + width + 'px';
     this.rightStyle.height = height + 1 + 'px';
     this.rightStyle.display = 'block';
   }

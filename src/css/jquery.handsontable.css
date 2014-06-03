@@ -68,7 +68,7 @@
   height: 22px;
   empty-cells: show;
   line-height: 21px;
-  padding: 0 4px 0 4px;
+  padding: 0px 4px;
   /* top, bottom padding different than 0 is handled poorly by FF with HTML5 doctype */
   background-color: #FFF;
   vertical-align: top;
@@ -200,6 +200,33 @@
   font-size: 0;
 }
 
+/* border colors */
+
+.handsontable .wtBorder.current {
+    background-color: #5292F7;
+    width: 2px;
+    height: 2px;
+}
+.handsontable .wtBorder.current:nth-child(2) {
+    margin-left: 0px;
+}
+.handsontable .wtBorder.current:nth-child(3) {
+    margin-top: -1px;
+}
+.handsontable .wtBorder.current:nth-child(4) {
+    margin-left: -1px;
+}
+.handsontable .wtBorder.area {
+    background-color: #89AFF9;
+    width: 1px;
+    height: 1px;
+}
+.handsontable .wtBorder.fill {
+    background-color: #ff0000;
+    width: 1px;
+    height: 1px;
+}
+
 .handsontable td.area {
   background-color: #EEF4FF;
 }
@@ -209,6 +236,11 @@
 .handsontable .wtBorder.corner {
   font-size: 0;
   cursor: crosshair;
+  background-color: #5292F7;
+  height: 5px;
+  width: 5px;
+  border: 2px solid #fff;
+  display: block;
 }
 
 .handsontable .htBorder.htFillBorder {
