@@ -1740,14 +1740,14 @@ Handsontable.Core = function (rootElement, userSettings) {
 
   /**
    * Return row height from settings (no guessing). Private use intended
-   * @param {Number} col
+   * @param {Number} row
    * @return {Number}
    */
   this._getRowHeightFromSettings= function (row) {
     var cellProperties = instance.getCellMeta(0, row);
     var height = cellProperties.height;
     if (height === void 0 || height === priv.settings.height) {
-      height = cellProperties.rowHeight;
+      height = cellProperties.rowHeights;
     }
     if (height !== void 0 && height !== null) {
       switch (typeof height) {
@@ -1772,11 +1772,12 @@ Handsontable.Core = function (rootElement, userSettings) {
    * @return {Number}
    */
   this.getRowHeight = function (row) {
-    debugger;
     var height = instance._getRowHeightFromSettings(row);
+
     if (!height) {
       height = 23;
     }
+
     height = Handsontable.hooks.execute(instance, 'modifyRowHeight', height, row);
     return height;
   };

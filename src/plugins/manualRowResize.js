@@ -30,10 +30,6 @@
         currentHeight = startHeight + (e.pageY - startY);
         newSize = setManualSize(currentRow, currentHeight);
         resizer.style.top = startOffset + currentHeight + 'px';
-      //      console.debug('startHeight + e.pageY - startY = currentHeight:' + startHeight + '+' + e.pageY + '-' + startY + '=' + currentHeight);
-      //      console.debug('newSize:' + newSize);
-      //      console.debug('startOffset:' + startOffset);
-      //      console.debug('-------------');
       }
     });
 
@@ -57,7 +53,6 @@
 
     var saveManualRowHeights = function () {
       var instance = this;
-
       Handsontable.hooks.run(instance, 'persistentStateSave', 'manualRowHeights', instance.manualRowHeights);
     };
 
@@ -75,6 +70,7 @@
       currentTH = TH;
 
       var row = this.view.wt.wtTable.getCoords(TH).row; //getCoords returns WalkontableCellCoords
+
       if (row >= 0) { //if not row header
         currentRow = row;
         var rootOffset = this.view.wt.wtDom.offset(this.rootElement[0]).top;
@@ -96,7 +92,6 @@
 
     var bindManualRowHeightEvents = function () {
       var instance = this;
-
       this.rootElement.on('mouseenter.handsontable', 'table tbody tr > th', function (e) {
         if (!pressed) {
           refreshResizerPosition.call(instance, e.currentTarget);
@@ -115,6 +110,7 @@
     };
 
     this.init = function (source) {
+
       var instance = this;
       var manualColumnHeightEnabled = !!(this.getSettings().manualRowResize);
 
@@ -141,16 +137,17 @@
     };
 
     var setManualSize = function (row, height) {
-      height = Math.max(height, 20);
+      height = Math.max(height, 23);
 
-      //row = Handsontable.hooks.execute(instance, 'modifyRow', row);
+      row = Handsontable.hooks.execute(instance, 'modifyRow', row);
 
       instance.manualRowHeights[row] = height;
       return height;
     };
 
     this.modifyRowHeight = function (height, row) {
-      //row = this.runHooksAndReturn('modifyRow', row);
+      row = this.runHooksAndReturn('modifyRow', row);
+
       if (this.getSettings().manualRowResize && this.manualRowHeights[row]) {
         return this.manualRowHeights[row];
       }

@@ -121,6 +121,7 @@
                                     rowHeaders: true,
                                     colHeaders: true,
                                     colWidths: [55, 80, 80, 80, 80, 80, 80],
+                                    rowHeights: [40, 30, 40, 100],
                                     manualColumnResize: true,
                                     manualRowResize: true,
                                     minSpareRows: 1,
@@ -144,7 +145,8 @@
                             HOT.runHooks('persistentStateReset');
 
                             HOT.updateSettings({
-                                manualColumnResize: true
+                                manualColumnResize: true,
+                                manualRowResize: true
                             });
 
                             $(".state-loaded.example1").fadeOut(300);

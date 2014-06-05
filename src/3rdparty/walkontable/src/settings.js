@@ -120,6 +120,7 @@ WalkontableSettings.prototype.has = function (key) {
 /**
  * specific methods
  */
+/*
 WalkontableSettings.prototype.rowHeight = function (row, TD) {
   if (!this.instance.rowHeightCache) {
     this.instance.rowHeightCache = []; //hack. This cache is being invalidated in WOT core.js
@@ -136,3 +137,4 @@ WalkontableSettings.prototype.rowHeight = function (row, TD) {
     return this.instance.rowHeightCache[row];
   }
 };
+*/

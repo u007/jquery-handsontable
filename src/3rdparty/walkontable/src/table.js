@@ -476,6 +476,8 @@ WalkontableTable.prototype._doDraw = function () {
         this.instance.getSetting('cellRenderer', source_r, source_c, TD);
       }
 
+      TR.firstChild.style.height = this.instance.getSetting('rowHeight', r) + 'px';
+
       offsetRow = this.instance.getSetting('offsetRow'); //refresh the value
 
       //after last column is rendered, check if last cell is fully displayed
