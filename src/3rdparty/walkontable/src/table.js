@@ -364,3 +364,4 @@ WalkontableTable.prototype.getVisibleRowsCount = function () {
 WalkontableTable.prototype.allRowsInViewport = function () {
   return this.getRowStrategy().cellCount == this.getVisibleRowsCount();
 };
+

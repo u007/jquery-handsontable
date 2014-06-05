@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>Manual column resize &amp; move - Handsontable</title>
+    <title>Manual row resize &amp; move - Handsontable</title>
 
     <!--
     Loading Handsontable (full distribution that includes all dependencies apart from jQuery)
@@ -44,7 +44,7 @@
                     , i
                     , j;
 
-            for (i = 0; i < 100000; i++) {
+            for (i = 0; i < 100; i++) {
                 var row = [];
                 for (j = 0; j < 10; j++) {
                     row.push(Handsontable.helper.spreadsheetColumnLabel(j) + i);
@@ -121,6 +121,7 @@
                                     rowHeaders: true,
                                     colHeaders: true,
                                     colWidths: [55, 80, 80, 80, 80, 80, 80],
+                                    rowHeights: [40, 30, 40, 100],
                                     manualColumnResize: true,
                                     manualRowResize: true,
                                     minSpareRows: 1,
@@ -144,7 +145,8 @@
                             HOT.runHooks('persistentStateReset');
 
                             HOT.updateSettings({
-                                manualColumnResize: true
+                                manualColumnResize: true,
+                                manualRowResize: true
                             });
 
                             $(".state-loaded.example1").fadeOut(300);

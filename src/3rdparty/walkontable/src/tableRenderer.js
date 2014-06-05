@@ -102,6 +102,7 @@ WalkontableTableRenderer.prototype.renderRows = function (totalRows, cloneLimit,
   var offsetRow = this.instance.getSetting('offsetRow');
   var visibleRowIndex = 0;
   var sourceRowIndex = this.rowFilter.visibleToSource(visibleRowIndex);
+  var isWorkingOnClone = this.wtTable.isWorkingOnClone();
 
   while (sourceRowIndex < totalRows && sourceRowIndex >= 0) {
     if (visibleRowIndex > 1000) {
@@ -123,10 +124,8 @@ WalkontableTableRenderer.prototype.renderRows = function (totalRows, cloneLimit,
 
     offsetRow = this.instance.getSetting('offsetRow'); //refresh the value
 
-
-
     //after last column is rendered, check if last cell is fully displayed
-    if (!this.wtTable.isWorkingOnClone()) {
+    if (!isWorkingOnClone) {
       res = this.wtTable.getRowStrategy().add(visibleRowIndex, lastTD);
 
       if (res === false) {
@@ -138,12 +137,14 @@ WalkontableTableRenderer.prototype.renderRows = function (totalRows, cloneLimit,
       }
     }
 
-    if (this.wtTable.isWorkingOnClone()) {
-      TR.style.height = this.instance.getSetting('rowHeight', sourceRowIndex) + 'px'; //if I have 2 fixed columns with one-line content and the 3rd column has a multiline content, this is the way to make sure that the overlay will has same row height
-    }
-    else {
-      this.instance.getSetting('rowHeight', sourceRowIndex, lastTD); //this trick saves rowHeight in rowHeightCache. It is then read in WalkontableVerticalScrollbarNative.prototype.sumCellSizes and reset in Walkontable constructor
-    }
+    TR.firstChild.style.height = this.instance.getSetting('rowHeight', sourceRowIndex) + 'px'; //if I have 2 fixed columns with one-line content and the 3rd column has a multiline content, this is the way to make sure that the overlay will has same row height
+
+//    if (isWorkingOnClone) {
+//      TR.firstChild.style.height = this.instance.getSetting('rowHeight', sourceRowIndex) + 'px'; //if I have 2 fixed columns with one-line content and the 3rd column has a multiline content, this is the way to make sure that the overlay will has same row height
+//    }
+//    else {
+//      this.instance.getSetting('rowHeight', sourceRowIndex, lastTD); //this trick saves rowHeight in rowHeightCache. It is then read in WalkontableVerticalScrollbarNative.prototype.sumCellSizes and reset in Walkontable constructor
+//    }
 
     visibleRowIndex++;
 

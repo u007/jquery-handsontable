@@ -175,6 +175,7 @@
   position: absolute;
   left: 0;
   cursor: row-resize;
+  z-index: 100;
 }
 
 .handsontable .manualRowResizerHandle {

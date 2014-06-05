@@ -10,6 +10,7 @@
      , startY
      , startHeight
      , startOffset
+     , scrollTop = 0
      , resizer = document.createElement('DIV')
      , handle = document.createElement('DIV')
      , line = document.createElement('DIV')
@@ -30,10 +31,6 @@
         currentHeight = startHeight + (e.pageY - startY);
         newSize = setManualSize(currentRow, currentHeight);
         resizer.style.top = startOffset + currentHeight + 'px';
-      //      console.debug('startHeight + e.pageY - startY = currentHeight:' + startHeight + '+' + e.pageY + '-' + startY + '=' + currentHeight);
-      //      console.debug('newSize:' + newSize);
-      //      console.debug('startOffset:' + startOffset);
-      //      console.debug('-------------');
       }
     });
 
@@ -57,7 +54,6 @@
 
     var saveManualRowHeights = function () {
       var instance = this;
-
       Handsontable.hooks.run(instance, 'persistentStateSave', 'manualRowHeights', instance.manualRowHeights);
     };
 
@@ -75,11 +71,12 @@
       currentTH = TH;
 
       var row = this.view.wt.wtTable.getCoords(TH).row; //getCoords returns WalkontableCellCoords
+
       if (row >= 0) { //if not row header
         currentRow = row;
         var rootOffset = this.view.wt.wtDom.offset(this.rootElement[0]).top;
         var thOffset = this.view.wt.wtDom.offset(TH).top;
-        startOffset = (thOffset - rootOffset);
+        startOffset = (thOffset - rootOffset) + scrollTop;
         resizer.style.top = startOffset + parseInt(this.view.wt.wtDom.outerHeight(TH), 10) + 'px';
 
         this.rootElement[0].appendChild(resizer);
@@ -97,13 +94,13 @@
     var bindManualRowHeightEvents = function () {
       var instance = this;
 
-      this.rootElement.on('mouseenter.handsontable', 'table tbody tr > th', function (e) {
+      instance.rootElement.on('mouseenter.handsontable', 'table tbody tr > th', function (e) {
         if (!pressed) {
           refreshResizerPosition.call(instance, e.currentTarget);
         }
       });
 
-      this.rootElement.on('mousedown.handsontable', '.manualRowResizer', function (e) {
+      instance.rootElement.on('mousedown.handsontable', '.manualRowResizer', function (e) {
         startY = e.pageY;
         refreshLinePosition.call(instance);
         newSize = startHeight;
@@ -136,26 +133,33 @@
           bindManualRowHeightEvents.call(this);
           instance.forceFullRender = true;
           instance.render();
+          Handsontable.hooks.add('afterRender', afterRender);
         }
       }
     };
 
     var setManualSize = function (row, height) {
-      height = Math.max(height, 20);
+      height = Math.max(height, 23);
 
-      //row = Handsontable.hooks.execute(instance, 'modifyRow', row);
+      row = Handsontable.hooks.execute(instance, 'modifyRow', row);
 
       instance.manualRowHeights[row] = height;
       return height;
     };
 
     this.modifyRowHeight = function (height, row) {
-      //row = this.runHooksAndReturn('modifyRow', row);
+      row = this.runHooksAndReturn('modifyRow', row);
+
       if (this.getSettings().manualRowResize && this.manualRowHeights[row]) {
         return this.manualRowHeights[row];
       }
       return height;
     };
+
+    var afterRender = function () {
+      var instance = this;
+      scrollTop = instance.rootElement.scrollTop();
+    }
   }
 
   var htManualRowResize = new HandsontableManualRowResize();
