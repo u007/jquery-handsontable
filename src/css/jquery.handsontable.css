@@ -157,6 +157,8 @@
   background-color: #88F;
 }
 
+/* row + column resizer*/
+
 .handsontable .manualColumnResizer {
   position: absolute;
   top: 0;
@@ -169,8 +171,22 @@
   height: 25px;
 }
 
+.handsontable .manualRowResizer {
+  position: absolute;
+  left: 0;
+  cursor: row-resize;
+}
+
+.handsontable .manualRowResizerHandle {
+  background-color: transparent;
+  height: 5px;
+  width: 50px;
+}
+
 .handsontable .manualColumnResizer:hover .manualColumnResizerHandle,
-.handsontable .manualColumnResizer.active .manualColumnResizerHandle {
+.handsontable .manualColumnResizer.active .manualColumnResizerHandle,
+.handsontable .manualRowResizer:hover .manualRowResizerHandle,
+.handsontable .manualRowResizer.active .manualRowResizerHandle {
   background-color: #AAB;
 }
 
@@ -184,9 +200,21 @@
   border-right: 1px dashed #777;
 }
 
-.handsontable .manualColumnResizer.active .manualColumnResizerLine {
+.handsontable .manualRowResizerLine {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: #AAB;
+  display: none;
+  width: 0;
+  border-bottom: 1px dashed #777;
+}
+
+.handsontable .manualColumnResizer.active .manualColumnResizerLine,
+.handsontable .manualRowResizer.active .manualRowResizerLine {
   display: block;
 }
+
 
 .handsontable .columnSorting:hover {
   text-decoration: underline;

@@ -98,6 +98,7 @@ module.exports = function (grunt) {
         'src/plugins/legacy.js',
         'src/plugins/manualColumnMove.js',
         'src/plugins/manualColumnResize.js',
+        'src/plugins/manualRowResize.js',
         'src/plugins/observeChanges.js',
         'src/plugins/persistentState.js',
         'src/plugins/undoRedo.js',

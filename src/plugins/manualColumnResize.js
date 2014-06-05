@@ -92,7 +92,7 @@ function HandsontableManualColumnResize() {
     var dblclick = 0;
     var autoresizeTimeout = null;
 
-    this.rootElement.on('mouseenter.handsontable', 'th', function (e) {
+    this.rootElement.on('mouseenter.handsontable', 'table thead tr > th', function (e) {
       if (!pressed) {
         refreshResizerPosition.call(instance, e.currentTarget);
       }
