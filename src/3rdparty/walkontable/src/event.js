@@ -11,13 +11,14 @@ function WalkontableEvent(instance) {
 
   var onMouseDown = function (event) {
     var cell = that.parentCell(event.target);
-
     if (that.wtDom.hasClass(event.target, 'corner')) {
       that.instance.getSetting('onCellCornerMouseDown', event, event.target);
     }
-    else if (cell.TD && cell.TD.nodeName === 'TD') {
-      if (that.instance.hasSetting('onCellMouseDown')) {
-        that.instance.getSetting('onCellMouseDown', event, cell.coords, cell.TD, that.instance);
+    else if (cell.TD){
+      if(cell.TD.nodeName == 'TD' || cell.TD.nodeName == 'TH'){
+        if (that.instance.hasSetting('onCellMouseDown')) {
+          that.instance.getSetting('onCellMouseDown', event, cell.coords, cell.TD, that.instance);
+        }
       }
     }
 
@@ -95,6 +96,7 @@ WalkontableEvent.prototype.parentCell = function (elem) {
   var cell = {};
   var TABLE = this.instance.wtTable.TABLE;
   var TD = this.wtDom.closest(elem, ['TD', 'TH'], TABLE);
+
   if (TD && this.wtDom.isChildOf(TD, TABLE)) {
     cell.coords = this.instance.wtTable.getCoords(TD);
     cell.TD = TD;

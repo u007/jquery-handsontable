@@ -229,8 +229,19 @@ WalkontableTable.prototype.getCell = function (coords) {
  * @returns {WalkontableCellCoords}
  */
 WalkontableTable.prototype.getCoords = function (TD) {
+  var row;
+  if(TD.nodeName == 'TH'){
+    if(TD.nextSibling!=null || TD.previousSibling!=null){
+      row = this.rowFilter.visibleColHeadedColumnToSourceColumn(this.wtDom.index(TD.parentNode)); //
+    } else {
+      row = this.rowFilter.visibleToSource(this.wtDom.index(TD.parentNode));
+    }
+  } else {
+    row = this.rowFilter.visibleToSource(this.wtDom.index(TD.parentNode));
+  }
+
   return new WalkontableCellCoords(
-    this.rowFilter.visibleToSource(this.wtDom.index(TD.parentNode)),
+    row,
     this.columnFilter.visibleRowHeadedColumnToSourceColumn(TD.cellIndex)
   );
 };
