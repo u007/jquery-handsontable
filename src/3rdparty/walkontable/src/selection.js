@@ -66,7 +66,8 @@ WalkontableSelection.prototype.draw = function () {
   var corners, r, c, source_r, source_c,
     instance = this.instance,
     visibleRows = instance.wtTable.getRowStrategy().countVisible(),
-    renderedColumns = instance.wtTable.getColumnStrategy().cellCount;
+    renderedColumns = instance.wtTable.getColumnStrategy().cellCount,
+    cacheLength;
 
   if (!this.isEmpty()) {
     corners = this.getCorners();
@@ -83,10 +84,16 @@ WalkontableSelection.prototype.draw = function () {
         else if (this.settings.highlightRowClassName && source_r >= corners[0] && source_r <= corners[2]) {
           //selection is in this row
           instance.wtTable.currentCellCache.add(r, c, this.settings.highlightRowClassName);
+
+          // selected row headers
+          instance.wtTable.currentCellCache.add(r,renderedColumns,this.settings.highlightRowClassName);
         }
         else if (this.settings.highlightRowClassName && source_c >= corners[1] && source_c <= corners[3]) {
           //selection is in this column
           instance.wtTable.currentCellCache.add(r, c, this.settings.highlightColumnClassName);
+
+          // selected column headers
+          instance.wtTable.currentCellCache.add(visibleRows,c,this.settings.highlightColumnClassName);
         }
       }
     }
