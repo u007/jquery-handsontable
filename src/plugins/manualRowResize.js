@@ -91,11 +91,34 @@
     }
 
     var bindManualRowHeightEvents = function () {
-      var instance = this;
+      var instance = this,
+          autoresizeTimeout = null,
+          dblclick = 0;
+
       this.rootElement.on('mouseenter.handsontable', 'table tbody tr > th', function (e) {
         if (!pressed) {
           refreshResizerPosition.call(instance, e.currentTarget);
         }
+      });
+
+      this.rootElement.on('mousedown.handsontable', '.manualRowResizer', function () {
+
+        if (autoresizeTimeout == null) {
+          autoresizeTimeout = setTimeout(function () {
+
+            if (dblclick >= 2) {
+              newSize = instance.determineRowHeight.call(instance, currentRow);
+              setManualSize(currentRow, newSize);
+              instance.forceFullRender = true;
+              instance.view.render();
+              Handsontable.hooks.run(instance, 'afterRowResize', currentRow, newSize);
+            }
+
+            dblclick = 0;
+            autoresizeTimeout = null;
+          }, 200);
+        }
+        dblclick++;
       });
 
       this.rootElement.on('mousedown.handsontable', '.manualRowResizer', function (e) {
