@@ -13,6 +13,31 @@ describe('manualRowResize', function () {
     }
   });
 
+  function resizeRow(displayedRowIndex, height) {
+
+    var $container = spec().$container;
+    var $th = $container.find('tbody tr:eq(' + displayedRowIndex + ') th:eq(0)');
+
+    $th.trigger('mouseenter');
+
+    var $resizer = $container.find('.manualRowResizer');
+    var resizerPosition = $resizer.position();
+
+    var mouseDownEvent = new $.Event('mousedown', {pageY: resizerPosition.top});
+    $resizer.trigger(mouseDownEvent);
+
+    var delta = height - $th.height() - 2;
+
+    if (delta < 0) {
+      delta = 0;
+    }
+
+    var mouseMoveEvent = new $.Event('mousemove', {pageY: resizerPosition.top + delta});
+    $resizer.trigger(mouseMoveEvent);
+
+    $resizer.trigger('mouseup');
+  }
+
   it("should change row heights at init", function () {
     handsontable({
       rowHeaders: true,
@@ -76,5 +101,66 @@ describe('manualRowResize', function () {
     expect(this.$container.find('tbody tr:eq(0) td:eq(0)').height()).toEqual(defaultRowHeight);
     expect(this.$container.find('tbody tr:eq(1) td:eq(0)').height()).toEqual(defaultRowHeight);
     expect(this.$container.find('tbody tr:eq(2) td:eq(0)').height()).toEqual(defaultRowHeight);
+  });
+
+  it("should trigger afterRowResize event after row height changes", function () {
+    var afterRowResizeCallback = jasmine.createSpy('afterRowResizeCallback');
+
+    handsontable({
+      data: createSpreadsheetData(5, 5),
+      rowHeaders: true,
+      manualRowResize: true,
+      afterRowResize: afterRowResizeCallback
+    });
+
+    expect(rowHeight(this.$container, 0)).toEqual(defaultRowHeight);
+
+    resizeRow(0, 100);
+    expect(afterRowResizeCallback).toHaveBeenCalledWith(0, 100, void 0, void 0, void 0);
+    expect(rowHeight(this.$container, 0)).toEqual(100);
+  });
+
+  it("should not trigger afterRowResize event if row height does not change (delta = 0)", function () {
+    var afterRowResizeCallback = jasmine.createSpy('afterRowResizeCallback');
+
+    handsontable({
+      data: createSpreadsheetData(5, 5),
+      rowHeaders: true,
+      manualRowResize: true,
+      afterRowResize: afterRowResizeCallback
+    });
+
+    expect(rowHeight(this.$container, 0)).toEqual(defaultRowHeight);
+
+    resizeRow(0, defaultRowHeight);
+    expect(afterRowResizeCallback).not.toHaveBeenCalled();
+    expect(rowHeight(this.$container, 0)).toEqual(defaultRowHeight);
+  });
+
+  it("should not trigger afterRowResize event after if row height does not change (no mousemove event)", function () {
+    var afterRowResizeCallback = jasmine.createSpy('afterRowResizeCallback');
+
+    handsontable({
+      data: createSpreadsheetData(5, 5),
+      rowHeaders: true,
+      manualRowResize: true,
+      afterRowResize: afterRowResizeCallback
+    });
+
+    expect(rowHeight(this.$container, 0)).toEqual(defaultRowHeight);
+
+    var $th = this.$container.find('tbody tr:eq(0) th:eq(0)');
+    $th.trigger('mouseenter');
+
+    var $resizer = this.$container.find('.manualRowResizer');
+    var resizerPosition = $resizer.position();
+
+    var mouseDownEvent = new $.Event('mousedown', {pageY: resizerPosition.top});
+    $resizer.trigger(mouseDownEvent);
+
+    $resizer.trigger('mouseup');
+
+    expect(afterRowResizeCallback).not.toHaveBeenCalled();
+    expect(rowHeight(this.$container, 0)).toEqual(defaultRowHeight);
   });
 });
