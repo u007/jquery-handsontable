@@ -125,6 +125,19 @@
 
       event.preventDefault();
 
+      var showRowHeaders = this.instance.getSettings().rowHeaders,
+          showColHeaders = this.instance.getSettings().colHeaders;
+
+      if(showRowHeaders || showColHeaders) {
+        if(!(event.target.nodeName == 'TD' || event.target.nodeName == 'TH') && !(Handsontable.Dom.hasClass(event.target, 'current') && Handsontable.Dom.hasClass(event.target, 'wtBorder'))){
+          return;
+        }
+      } else {
+        if(event.target.nodeName != 'TD' && !(Handsontable.Dom.hasClass(event.target, 'current') && Handsontable.Dom.hasClass(event.target, 'wtBorder'))){
+          return;
+        }
+      }
+
       //if(event.target.nodeName != 'TD' && !(Handsontable.Dom.hasClass(event.target, 'current') && Handsontable.Dom.hasClass(event.target, 'wtBorder'))){
       //	return;
       //}
