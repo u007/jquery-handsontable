@@ -163,4 +163,69 @@ describe('manualRowResize', function () {
     expect(afterRowResizeCallback).not.toHaveBeenCalled();
     expect(rowHeight(this.$container, 0)).toEqual(defaultRowHeight);
   });
+
+  it("should trigger an afterRowResize after row size changes, after double click", function () {
+    var afterRowResizeCallback = jasmine.createSpy('afterRowResizeCallback');
+
+    handsontable({
+      data: createSpreadsheetData(5, 5),
+      rowHeaders: true,
+      manualRowResize: true,
+      afterRowResize: afterRowResizeCallback
+    });
+
+    expect(rowHeight(this.$container, 0)).toEqual(defaultRowHeight);
+
+    var $th = this.$container.find('tbody tr:eq(2) th:eq(0)');
+    $th.trigger('mouseenter');
+
+    var $resizer = this.$container.find('.manualRowResizer');
+    var resizerPosition = $resizer.position();
+
+    var mouseDownEvent = new $.Event('mousedown', {pageY: resizerPosition.top});
+    $resizer.trigger(mouseDownEvent);
+    $resizer.trigger('mouseup');
+
+    mouseDownEvent = new $.Event('mousedown', {pageY: resizerPosition.top});
+    $resizer.trigger(mouseDownEvent);
+    $resizer.trigger('mouseup');
+
+    waitsFor(function() {
+      return afterRowResizeCallback.calls.length > 0;
+    }, 'Row resize', 500);
+
+    runs(function () {
+      expect(afterRowResizeCallback.calls.length).toEqual(1);
+      expect(afterRowResizeCallback.calls[0].args[0]).toEqual(2);
+
+      expect(afterRowResizeCallback.calls[0].args[1]).toEqual(defaultRowHeight);
+      expect(rowHeight(this.$container, 2)).toEqual(defaultRowHeight);
+    });
+  });
+
+  it("should not trigger afterRowResize event after if row height does not change (no dblclick event)", function () {
+    var afterRowResizeCallback = jasmine.createSpy('afterRowResizeCallback');
+
+    handsontable({
+      data: createSpreadsheetData(5, 5),
+      rowHeaders: true,
+      manualRowResize: true,
+      afterRowResize: afterRowResizeCallback
+    });
+
+    expect(rowHeight(this.$container, 0)).toEqual(defaultRowHeight);
+
+    var $th = this.$container.find('tbody tr:eq(2) th:eq(0)');
+    $th.trigger('mouseenter');
+
+    var $resizer = this.$container.find('.manualRowResizer');
+    var resizerPosition = $resizer.position();
+
+    var mouseDownEvent = new $.Event('mousedown', {pageY: resizerPosition.top});
+    $resizer.trigger(mouseDownEvent);
+    $resizer.trigger('mouseup');
+
+    expect(afterRowResizeCallback).not.toHaveBeenCalled();
+    expect(rowHeight(this.$container, 0)).toEqual(defaultRowHeight);
+  })
 });
