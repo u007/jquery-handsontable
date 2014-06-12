@@ -11,6 +11,7 @@
      , startHeight
      , startOffset
      , scrollTop = 0
+     , scrollLeft = 0
      , resizer = document.createElement('DIV')
      , handle = document.createElement('DIV')
      , line = document.createElement('DIV')
@@ -78,7 +79,7 @@
         var thOffset = this.view.wt.wtDom.offset(TH).top;
         startOffset = (thOffset - rootOffset) + scrollTop;
         resizer.style.top = startOffset + parseInt(this.view.wt.wtDom.outerHeight(TH), 10) + 'px';
-
+        resizer.style.left = scrollLeft + 'px';
         this.rootElement[0].appendChild(resizer);
       }
     }
@@ -184,6 +185,7 @@
     var afterRender = function () {
       var instance = this;
       scrollTop = instance.rootElement.scrollTop();
+      scrollLeft = instance.rootElement.scrollLeft();
     }
   }
 

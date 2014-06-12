@@ -8,6 +8,7 @@ function HandsontableManualColumnResize() {
     , startX
     , startWidth
     , startOffset
+    , scrollTop = 0
     , scrollLeft = 0
     , resizer = document.createElement('DIV')
     , handle = document.createElement('DIV')
@@ -75,7 +76,7 @@ function HandsontableManualColumnResize() {
       var thOffset = this.view.wt.wtDom.offset(TH).left;
       startOffset = (thOffset - rootOffset) - 6 + scrollLeft;
       resizer.style.left = startOffset + parseInt(this.view.wt.wtDom.outerWidth(TH), 10) + 'px';
-
+      resizer.style.top = scrollTop + 'px';
       this.rootElement[0].appendChild(resizer);
     }
   }
@@ -177,6 +178,7 @@ function HandsontableManualColumnResize() {
 
   var afterRender = function () {
     var instance = this;
+    scrollTop = instance.rootElement.scrollTop();
     scrollLeft = instance.rootElement.scrollLeft();
   }
 }
