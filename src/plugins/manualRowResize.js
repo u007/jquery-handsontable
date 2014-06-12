@@ -96,11 +96,13 @@
           autoresizeTimeout = null,
           dblclick = 0;
 
+
       instance.rootElement.on('mouseenter.handsontable', 'table tbody tr > th', function (e) {
         if (!pressed) {
           refreshResizerPosition.call(instance, e.currentTarget);
         }
       });
+
 
       instance.rootElement.on('mousedown.handsontable', '.manualRowResizer', function () {
 
@@ -134,6 +136,7 @@
     };
 
     this.init = function (source) {
+
       var instance = this;
       var manualColumnHeightEnabled = !!(this.getSettings().manualRowResize);
 
