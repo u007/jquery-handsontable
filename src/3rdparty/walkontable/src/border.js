@@ -35,9 +35,6 @@ function WalkontableBorder(instance, settings) {
     this.main.appendChild(DIV);
   }
 
-
-
-
   this.top = this.main.childNodes[0];
   this.left = this.main.childNodes[1];
   this.bottom = this.main.childNodes[2];
