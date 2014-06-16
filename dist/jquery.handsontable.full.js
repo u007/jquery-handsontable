@@ -11553,11 +11553,49 @@ WalkontableScrollbar.prototype.init = function () {
   this.handle = document.createElement('DIV');
   this.handleStyle = this.handle.style;
   this.handle.className = 'handle';
-
+	
+	
+	if (this.type == "horizontal") {
+		this.handleArrowLeft = document.createElement("DIV");
+		this.handleArrowLeft.className = "scroll left";
+	
+		this.handleArrowRight = document.createElement("DIV");
+		this.handleArrowRight.className = "scroll right";
+	}
+	
   this.slider.appendChild(this.handle);
   this.container = this.instance.wtTable.holder;
   this.container.appendChild(this.slider);
 
+	
+	var target = this
+	if (this.type == "horizontal") {
+		this.slider.appendChild(this.handleArrowLeft);
+		this.slider.appendChild(this.handleArrowRight);
+		
+		this.handleArrowLeft.style = "position: absolute; left:0; top: 0; z-index: 100; width: 25px; text-align: center;";
+		this.handleArrowRight.style = "position: absolute; right: 0; top: 0; z-index:100; width: 25px; text-align: center; ";
+	
+		this.handleArrowLeft.innerHTML = "<span class='glyphicon glyphicon-chevron-left'></span>";
+		this.handleArrowRight.innerHTML = "<span class='glyphicon glyphicon-chevron-right'></span>";
+	
+	
+		this.handleArrowLeft.onmousedown = function(e) {
+			target.instance.scrollHorizontal(-1).draw();
+			e.stopPropagation();
+			return false;
+		};
+		//console.log(this.handleArrowRight);
+		this.handleArrowRight.onmousedown = function(e) {
+			//console.log("right: ", target);
+			target.instance.scrollHorizontal(1).draw();
+			//target.scrollTo(8);
+			e.stopPropagation();
+			return false;
+		};
+		
+	}
+	
   var firstRun = true;
   this.dragTimeout = null;
   var dragDelta;
